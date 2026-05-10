@@ -1,3 +1,5 @@
+import CurrentWeather from "@/components/current-weather";
+import HourlyTemperature from "@/components/hourly-temperature";
 import WeatherSkeleton from "@/components/loading-skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -74,7 +76,7 @@ const WeatherDashboard = () => {
     );
   }
 
-  const locationName = locationQuery.data?.[0]?.name;
+  const locationName = locationQuery.data?.[0];
 
   if (weatherQuery.error || forecastQuery.error) {
     return (
@@ -113,6 +115,24 @@ const WeatherDashboard = () => {
             className={`h-4 w-4 ${weatherQuery.isFetching ? "animate-spin" : ""}`}
           />
         </Button>
+      </div>
+
+      {/* Current and Hourly Weather Information */}
+      <div className="grid gap-6">
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Current Weather */}
+          <CurrentWeather
+            data={weatherQuery.data}
+            locationName={locationName}
+          />
+          {/* Hourly Temperature */}
+          <HourlyTemperature data={forecastQuery.data} />
+        </div>
+
+        <div>
+          {/* Weather Details */}
+          {/* Forecast */}
+        </div>
       </div>
     </div>
   );
