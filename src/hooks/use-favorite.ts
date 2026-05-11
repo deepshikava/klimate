@@ -1,0 +1,78 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useLocalStorage } from "./use-local-storage";
+
+interface FavoriteCity {
+  id: string;
+  name: string;
+  lat: number;
+  lon: number;
+  country: string;
+  state?: string;
+  addedAt: number;
+}
+
+export function useFavorites() {
+  const [favorites, setFavorites] = useLocalStorage<FavoriteCity[]>(
+    "favorites",
+    [],
+  );
+
+  const queryClient = useQueryClient();
+
+  const favoritesQuery = useQuery({
+    queryKey: ["favorites"],
+    queryFn: () => favorites,
+    initialData: favorites,
+    enabled: favorites.length > 0,
+    staleTime: Infinity,
+  });
+
+  const addFavorite = useMutation({
+    mutationFn: async (city: Omit<FavoriteCity, "id" | "addedAt">) => {
+      const newFavorite: FavoriteCity = {
+        ...city,
+        id: `${city.lat}-${city.lon}`,
+        addedAt: Date.now(),
+      };
+
+      const exists = favorites.some(
+        (fav) => fav.lat === newFavorite.lat && fav.lon === newFavorite.lon,
+      );
+
+      if (exists) return favorites;
+
+      const newFavorites = [newFavorite, ...favorites].slice(0, 10);
+      setFavorites(newFavorites);
+      return newFavorites;
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["favorites"],
+      });
+    },
+  });
+
+  const removeFavorite = useMutation({
+    mutationFn: async ({ lat, lon }: { lat: number; lon: number }) => {
+      const newFavorites = favorites.filter(
+        (city) => !(city.lat === lat && city.lon === lon),
+      );
+      setFavorites(newFavorites);
+      return newFavorites;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["favorites"],
+      });
+    },
+  });
+
+  return {
+    favorites: favoritesQuery.data ?? [],
+    addFavorite,
+    removeFavorite,
+    isFavorite: (lat: number, lon: number) =>
+      favorites.some((city) => city.lat === lat && city.lon === lon),
+  };
+}
