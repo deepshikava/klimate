@@ -47,7 +47,7 @@ const WeatherForecast = ({ data }: WeatherForecastProps) => {
 
   const formatTemp = (temp: number) => `${Math.round(temp)}°`;
 
-  const nextDays = Object.values(dailyForecast).slice(0, 6);
+  const nextDays = Object.values(dailyForecast).slice(0, 5);
 
   return (
     <Card>
