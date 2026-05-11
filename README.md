@@ -17,7 +17,7 @@
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_App-22D3EE?style=for-the-badge)](https://github.com/deepshikava/klimate)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_App-22D3EE?style=for-the-badge)](https://klimate-six.vercel.app/)
 [![GitHub Repo](https://img.shields.io/badge/📂_Source_Code-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/deepshikava/klimate)
 
 </div>
