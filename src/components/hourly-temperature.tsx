@@ -1,4 +1,4 @@
-import type { ForcastData } from "@/api/types";
+import type { ForecastData } from "@/api/types";
 import {
   Line,
   LineChart,
@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { format } from "date-fns";
 
 interface HourlyTemperatureProps {
-  data: ForcastData;
+  data: ForecastData;
 }
 
 const HourlyTemperature = ({ data }: HourlyTemperatureProps) => {
